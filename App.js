@@ -1,63 +1,45 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import {StyleSheet,} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import FirstPage from "./Screens/FirstPage";
+import SecondPage from "./Screens/SecondPage";
 
 const Stack = createNativeStackNavigator();
 
-function HomeScreen({ navigation, route }) {
-  React.useEffect(() => {
-    if (route.params?.post) {
-    }
-  }, [route.params?.post]);
-
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button
-        title="Create Post"
-        onPress={() => navigation.navigate("CreatePost")}
-      />
-      <Text style={{ margin: 10 }}>Post:{route.params?.post}</Text>
-    </View>
-  );
-}
-
-function CreatePostScreen({ navigation, route }) {
-  const [postText, setPostText] = React.useState("");
-  return (
-    <>
-      <TextInput
-        multiline
-        placeholder="Please Text here"
-        style={{ height: 200, padding: 10, backgroundColor: "white" }}
-        onChangeText={setPostText}
-        value={postText}
-      />
-      <Button
-        title="Done"
-        onPress={() => {
-          navigation.navigate("Home", { post: postText });
-        }}
-      />
-    </>
-  );
-}
-
-export default function App() {
+function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="FirstPage"
         screenOptions={{
-          headerStyle: { backgroundColor: "#008b8b" },
+          headerStyle: { backgroundColor: "#3820DC"  },
           headerTintColor: "#ffff",
-          headerTitleStyle: { fontWeight: "bold", fontSize: 30 },
+          headerTitleStyle: { fontWeight: "900", fontSize: 35 },
         }}
       >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="CreatePost" component={CreatePostScreen} />
+        <Stack.Screen name="First Page" component={FirstPage} />
+        <Stack.Screen name="Second Page" component={SecondPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+export default App;
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    padding: 20,
+  },
+  heading: {
+    fontSize: 35,
+    textAlign: "center",
+    marginVertical: 10, 
+  },
+  textStyle: {
+    textAlign: "center",
+    fontSize: 25,
+  },
+});
