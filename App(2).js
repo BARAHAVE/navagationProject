@@ -1,31 +1,114 @@
-import { setStatusBarBackgroundColor, StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./Screens/HomeScreen";
-import AboutScreen from "./Screens/AboutScreen";
-import FirstPage from "./pages/FirstPage";
-import SecondPage from "./pages/SecondPage";
-import ThirdPage from "./pages/ThirdPage";
+import * as React from "react";
+import { Button, View, Text, Image, StyleSheet ,SafeAreaView} from "react-native";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from "@react-navigation/drawer";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const Stack = createNativeStackNavigator();
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "rgb(255,45,85)",
+  },
+};
+
+
+
+function HomeScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Ionicons name="home" size={30} color="#008b8b" />
+      <Text>Home Screen</Text>
+    </View>
+  );
+}
+function SettingScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Setting!</Text>
+      <Button title="Go to home" onPress={() => navigation.navigate("Home")} />
+    </View>
+  );
+}
+
+
+
+
+const Tab = createBottomTabNavigator();
+
+function MyTab() {
+  return (
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused
+                ? 'ios-information-circle'
+                : 'ios-information-circle-outline';
+            } else if (route.name === 'Settings') {
+              iconName = focused ? 'ios-list' : 'ios-list-outline';
+            }
+
+            return <Ionicons name={iconName} size={size} color= {color} />;
+          },
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'gray',
+          headerRight: () => (
+            <Ionicons name='person-add' size={25} color= {'black'} />
+          )
+
+        })}
+      >
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Settings" component={SettingScreen} />
+      </Tab.Navigator>
+      
+
+  );
+}
+
+
+
+
+
+
+const Drawer = createDrawerNavigator();
+
+function MyDrawer() {
+  return (
+  
+    <Drawer.Navigator
+      useLegacyImplementation
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: "white",
+          Width: 240,
+        },
+      }}
+    >
+      <Drawer.Screen name="Home" component={ MyTab} />
+      <Drawer.Screen name="Settings" component={SettingScreen} />
+    </Drawer.Navigator>
+  );
+
+}
+
 
 export default function App() {
   return (
-    <NavigationContainer>
-    <Stack.Navigator
-      initialRouteName="Home"
-      screenOptions={{
-        //  headerStyle: { backgroundColor: "blue" },
-        headerStyle: { backgroundColor: "#25FF" },
-        headerTintColor: "#ffff",
-        headerTitleStyle: { fontWeight: "bold" },
-      }}
-    >
-      <Stack.Screen name="First Page" component={FirstPage} />
-      <Stack.Screen name="Second Page" component={SecondPage} />
-      <Stack.Screen name="Third Page" component={ThirdPage} />
-    </Stack.Navigator>
+    <NavigationContainer theme={MyTheme}>
+        <MyDrawer/>
     </NavigationContainer>
   );
 }
+
+
